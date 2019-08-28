@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="jquery.js"></script>
+
+        <title>Bootstrap Multilevel Dropdowns</title>
+        <link href="bootstrap-3.3.4-min.css" rel="stylesheet" />
+        <link href="submenu.css" rel="stylesheet" />
+        <script src="bootstrap.min.js"></script>      
+        <script>
+            $( document ).ready(function() {
+                $(".dropdown-menu").hover(function(){
+                    $(this).css("background-color", "yellow");
+                    //alert($(this).offset()["left"]));
+                    $("#secondLevel").show();
+                }, function(){
+                    $("#secondLevel").hide();
+                });
+            });
+        </script>
+
+    </head>
+    <body>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="margin-left:200px;display: block; position: static; margin-bottom: 5px; width: 180px;">
+            <li><a href="#">Apple</a></li>
+            <li><a href="#">Pears</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Citrus</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="#">Oranges</a></li>                    
+                    <li><a href="#">Grapefruit</a></li>
+                    <li><a href="#">Mandarins</a></li>
+                    <li><a href="#">Limes</a></li>
+                </ul>
+            </li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Tropical and exotic </a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="#">Bananas</a></li>                    
+                    <li><a href="#">Mangoes</a></li>                  
+                </ul>
+            </li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Berries</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="#">Strawberries</a></li>                    
+                    <li><a href="#">Raspberries</a></li> 
+                    <li><a href="#">Kiwifruit </a></li>  
+                    <li><a href="#">Passionfruit </a></li>  
+                </ul>
+            </li>
+             <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Melons</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="#">Watermelons</a></li>                    
+                    <li><a href="#">Rockmelons</a></li> 
+                    <li><a href="#">Honeydew melons </a></li>  
+                </ul>
+            </li>
+        </ul>
+
+
+
+    </body>
+</html>

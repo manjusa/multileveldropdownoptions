@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="jquery.js"></script>
+
+        <title>Bootstrap Multilevel Dropdowns</title>
+        <link href="bootstrap-3.3.4-min.css" rel="stylesheet" />
+        <script src="bootstrap.min.js"></script>
+        <link href="font-awesome.min.css" rel="stylesheet" />
+        <style>
+            li{
+                list-style:none;
+                padding-bottom: 5px;
+            }
+            a:link{
+                text-decoration: none;  
+            }
+            .optionstyle{
+                font-size: 1.2em;
+                padding:5px;
+                color:grey;
+            }
+            .spanstyle{
+                padding-left: 5px;
+            }
+        </style>
+        <script>
+            /*AreAllChildrenSelected() checks for the given id(starting with),if all list item checkboxes are selected
+            If all are selected, then put a tick on the parent checkbox as well.
+            */
+
+            function AreAllChildrenSelected(id){
+                var totalLength=$(id).closest('ul').find("[type=checkbox]").length;
+                var checkedLength=$(id).closest('ul').find("[type=checkbox]:checked").length;
+                if(totalLength==checkedLength){return true;}
+                else return false;
+            }
+
+            $(document).ready(function(){
+                /*
+                Bind a click event to parent.Parent means the first level, like in our case "veggies"
+                "fruits" etc.
+                */
+                $("[id^='parent_']").on("click",function(){
+                    var secLevel=$(this).children("[id^='secondlevel']").first();
+                    $(secLevel).toggle();                    
+                    event.stopPropagation();   
+                });  
+                 /*
+               select all is the checkbox next to the parent.When you click that, all child
+               checkboxes should be checked
+                */
+                $("[id^='selectAll']").on("click",function(event){
+                    if($(this).hasClass("fa-square-o")){
+                        $(this).toggleClass("fa-square-o fa-check-square-o");
+                        $(this).closest("li").find("ul").find("[type=checkbox]:not(:checked)").each(function(i,v){
+                            $(this).prop("checked",true);
+                            $(this).parent().find('i').removeClass("fa-square-o");
+                            $(this).parent().find('i').addClass('fa-check-square-o');
+                        });       
+                    }
+                    else{
+                        $(this).toggleClass("fa-square-o fa-check-square-o");
+                        $(this).closest("li").find("ul").find("[type=checkbox]:checked").each(function(i,v){
+                            $(this).prop("checked",false);
+                            $(this).parent().find('i').removeClass("fa-check-square-o");
+                            $(this).parent().find('i').addClass('fa-square-o');
+                        });  
+                    }
+                        event.stopPropagation(); 
+                    }); 
+
+                $('ul.dropdown-menu').on('click',function(event){
+                    event.stopPropagation();            
+                });
+                /*
+                Below biding is 
+                
+                $('#secondLevel_fruits_checkbox1').on('click',function(event){
+                    event.stopPropagation();            
+                });*/
+                /*Below binding is for every child checkbox
+                */
+                $("[id^='submenuchild']").on('click',function(event){
+                    if($(this).hasClass("fa-square-o")){
+                        $(this).closest('a').parent().find("[type=checkbox]").prop("checked",true);
+                    }
+                    else{
+                        $(this).closest('a').parent().find("[type=checkbox]").prop("checked",false);
+                    }
+                    //now thatcheckbox is checked or unchecked based on the logic above
+                    //we also need to ensure the main/parent checkbox is checked
+                    //if all child checkboxes are checked
+                    if(AreAllChildrenSelected($(this)))
+                    {
+                        var parentI=$(this).closest("ul").parent().find("i");
+                        if($(parentI).hasClass("fa-square-o"))
+                        {
+                            $(parentI).eq(0).removeClass("fa-square-o");
+                            $(parentI).eq(0).addClass("fa-check-square-o")
+                        }                        
+                    }     
+                    else{     
+                        var parentI=$(this).closest("ul").parent().find("i");
+                        $(parentI).eq(0).removeClass("fa-check-square-o");
+                        $(parentI).eq(0).addClass("fa-square-o");
+                    }
+
+                    // $(this).closest("[type=checkbox]").prop("checked",true);
+                    $(this).toggleClass("fa-square-o fa-check-square-o");
+                    event.stopPropagation();            
+                });
+            });
+        </script>
+    </head>
+    <body>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"  aria-expanded="false">
+                Dropdown
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                <li id="parent_nuts"> 
+                    <input id="parent_veggies_input" type="checkbox" hidden="">   
+                    <a href="#"><i id="selectAll0" style="font-size: 1.4em;" class="fa fa-square-o"></i>
+                        Nuts
+                    </a>
+                </li>
+                <li id="parent_fruits"> 
+                    <a href="#"><i id="selectAll1" style="font-size:1.4em;" class="fa fa-square-o"></i>
+                        <span class="fa fa-caret-right"></span>&nbsp;Citrus 
+                    </a>
+                    <ul id="secondlevel_fruits" style="display: none;">
+                        <li style="line-item:none">
+                            <span>
+                                <input id="secondLevel_fruits_checkbox0" type="checkbox" hidden/>
+                                <a href="#"><i id="submenuchild0" class="optionstyle fa fa-square-o"><span class="spanstyle">Oranges</span></i></a>
+                            </span>      
+                        </li>  
+                        <li style="line-item:none"> <span>
+                            <input id="secondLevel_fruits_checkbox1" type="checkbox" hidden/>
+                            <a href="#"><i  id="submenuchild1" class="optionstyle fa fa-square-o"><span class="spanstyle">Grapefruits</span></i></a>
+                            </span>      
+                        </li>
+                        
+                         <li style="line-item:none"> <span>
+                            <input id="secondLevel_fruits_checkbox2" type="checkbox" hidden/>
+                            <a href="#"><i  id="submenuchild2" class="optionstyle fa fa-square-o"><span class="spanstyle">Limes</span></i></a>
+                            </span>      
+                        </li>  
+                    </ul>
+                </li>
+                <li id="parent_veggies"> 
+                    <a href="#"><i id="selectAll1" style="font-size:1.4em;" class="fa fa-square-o"></i>
+                        <span class="fa fa-caret-right"></span>&nbsp;Veggies
+                    </a>
+                    <ul id="secondlevel_veggies" style="display: none;">
+                        <li style="line-item:none">
+                            <span>
+                                <input id="secondLevel_fruits_checkbox0" type="checkbox" hidden/>
+                                <a href="#"><i id="submenuchild0" class="optionstyle fa fa-square-o"><span class="spanstyle">Cabbage</span></i></a>
+                            </span>      
+                        </li>  
+                        <li style="line-item:none"> <span>
+                            <input id="secondLevel_veggies_checkbox1" type="checkbox" hidden/>
+                            <a href="#"><i  id="submenuchild1" class="optionstyle fa fa-square-o"><span class="spanstyle">Lettuce</span></i></a>
+                            </span>      
+                        </li>  
+                    </ul>
+                </li> 
+            </ul>
+        </div>
+    </body>
+</html>
